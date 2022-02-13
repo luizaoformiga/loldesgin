@@ -1,21 +1,22 @@
-import { useState } from 'react';
-import Popup from 'reactjs-popup';
+import { useState } from "react";
+import Popup from "reactjs-popup";
+import { NextPage } from "next";
+
 import {
   MdDelete,
   MdEdit,
   MdVisibility,
   MdDeleteForever,
-} from 'react-icons/md';
-import { toast } from 'react-toastify';
+} from "react-icons/md";
+import { toast } from "react-toastify";
 
-import { Container, Actions, Action } from './styles';
-import ModalDelete from '~/components/Modals/Delete';
-import ModalView from '~/components/Modals/View';
-import api from '../../../services/api';
-import { NextPage } from 'next';
+import { Container, Actions, Action } from "./styles";
+import { ModalDelete } from "../../Modals/Delete/delete";
+import { ModalView } from "../../Modals/View/view";
+import api from "../../../services/api";
 
 interface Props {
-  setReloadList: Function,
+  setReloadList: (bool: boolean) => void;
   actions: {
     del: any;
     cancel: any;
@@ -28,22 +29,25 @@ export const ActionsDrop: NextPage<Props> = ({ setReloadList, actions }) => {
   const [infoModalView, setInfoModalView] = useState({});
   const [modalIsOpen, setIsOpen] = useState({ view: false, del: false });
 
-  async function handleModalDelete() {
+  async function handleModalDelete(): Promise<void> {
     const { url, type } = actions.del || actions.cancel;
+
     await api.delete(url);
     setReloadList(true);
-    setIsOpen(false);
-    if (type.includes('Problema')) {
-      toast.success('Encomenda cancelada com sucesso!');
-      toast.info('E-mail enviado ao entregador!');
+    setIsOpen((prevState) => (prevState = { view: false, del: false }));
+
+    if (type.includes("Problema")) {
+      toast.success("Encomenda cancelada com sucesso!");
+      toast.info("E-mail enviado ao entregador!");
     } else {
       toast.info(`${type} excluida!`);
     }
   }
 
-  async function handleModalView() {
+  async function handleModalView(): Promise<void> {
     const { url, type } = actions.view;
     setIsOpen({ ...modalIsOpen, view: true });
+
     const { data } = await api.get(url);
     setInfoModalView({ type, ...data });
   }
@@ -55,8 +59,8 @@ export const ActionsDrop: NextPage<Props> = ({ setReloadList, actions }) => {
         position="bottom center"
         on="click"
         contentStyle={{
-          width: '160px',
-          borderRadius: '4px',
+          width: "160px",
+          borderRadius: "4px",
         }}
       >
         <Actions>
@@ -113,4 +117,4 @@ export const ActionsDrop: NextPage<Props> = ({ setReloadList, actions }) => {
       />
     </Container>
   );
-}
+};

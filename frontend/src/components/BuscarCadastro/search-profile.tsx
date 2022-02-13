@@ -1,8 +1,8 @@
-import { MdAdd } from 'react-icons/md';
-import { NextPage } from 'next';
+import { MdAdd } from "react-icons/md";
+import { NextPage } from "next";
 
-import InputSearch from '~/components/InputSearch';
-import { Container } from './styles';
+import { InputSearch } from "../InputSearch/input-search";
+import { Container } from "./styles";
 
 interface Props {
   linkBtn: string;
@@ -18,4 +18,4 @@ export const BuscarCadastro: NextPage<Props> = ({ linkBtn, ...rest }) => {
       </Link>
     </Container>
   );
-}
+};

@@ -1,15 +1,15 @@
-import { MdCheck, MdKeyboardArrowLeft } from 'react-icons/md';
-import { NextPage } from 'next';
+import { MdCheck, MdKeyboardArrowLeft } from "react-icons/md";
+import { NextPage } from "next";
 
-import Title from '~/components/Title';
-import { Container, Btns, BtnSubmit, BtnBack } from './styles';
+import { Title } from "../../Title/title";
+import { Container, Btns, BtnSubmit, BtnBack } from "./styles";
 
 interface Props {
   content: string;
   voltarLink: string;
 }
 
-export const Header: NextPage<Props> = ({ content, voltarLink = '/' }) => {
+export const Header: NextPage<Props> = ({ content, voltarLink = "/" }) => {
   return (
     <Container>
       <Title content={content} />
@@ -25,4 +25,4 @@ export const Header: NextPage<Props> = ({ content, voltarLink = '/' }) => {
       </Btns>
     </Container>
   );
-}
+};

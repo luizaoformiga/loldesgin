@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import Image from "next/image";
 
 import logo from '~/assets/logo.png';
-import { signOut } from '~/store/modules/auth/actions';
+import { signOut } from '../../store/modules/auth/actions';
 import { Container, Content, Profile } from './styles';
 
 export const Header: NextPage = () => {

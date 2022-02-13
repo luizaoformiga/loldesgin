@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { MouseEventHandler } from 'react';
 import Modal from 'react-modal';
 
 import { ContentModal, ContainerBtns, BtnYes, BtnNo } from './styles';
@@ -23,13 +24,13 @@ const messageContent = {
 
 interface Props {
   setIsOpen: Function;
-  handleDelete: Function;
+  handleDelete: MouseEventHandler<HTMLButtonElement>;
   isOpen: boolean;
   type: string;
 }
 
 export const ModalDelete: NextPage<Props> = ({ type, setIsOpen, handleDelete, isOpen }) => {
-  function closeModal(): void {
+  function closeModal(): MouseEventHandler<HTMLButtonElement> {
     return setIsOpen({ view: false, del: false });
   }
 

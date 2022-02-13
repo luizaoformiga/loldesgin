@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
+import { NextPage } from 'next';
 import { useField } from '@unform/core';
 import ReactInputMask from 'react-input-mask';
-import { NextPage } from 'next';
 
 import { Container } from '../../../components/Form/Input/styles';
 
@@ -31,7 +31,7 @@ export const InputMask: NextPage<Props> = ({ label, name, ...rest }) => {
   return (
     <Container>
       <label htmlFor={fieldName}>{label}</label>
-      <ReactInputMask id={fieldName} ref={inputRef} {...rest} />
+      <ReactInputMask mask="" id={fieldName} ref={inputRef} {...rest} />
 
       {error && <span>** {error} **</span>}
     </Container>

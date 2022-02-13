@@ -2,6 +2,7 @@ import Modal from 'react-modal';
 import { MdInsertPhoto } from 'react-icons/md';
 import { Container, GroupInfo, Signature, ContentProblem } from './styles';
 import { NextPage } from 'next';
+import { MouseEventHandler } from 'react';
 
 const customStyles = {
   content: {
@@ -17,11 +18,29 @@ const customStyles = {
 interface Props {
   setIsOpen: Function;
   isOpen: boolean;
-  info: object;
+  info: {
+    signature: {
+      url: string;
+    }
+    type: string;
+    start_date: string;
+    end_date: string;
+    delivery: {
+      product: string;
+    };
+    description: string;
+    recipient: {
+      street: string;
+      city: string;
+      cep: string;
+      number: number;
+      state: string;
+    }
+  };
 }
 
 export const ModalView: NextPage<Props> = ({ setIsOpen, isOpen, info }) => {
-  function closeModal(): void {
+  function closeModal(): MouseEventHandler<HTMLButtonElement> {
     return setIsOpen({ del: false, view: false });
   }
 
@@ -56,7 +75,7 @@ export const ModalView: NextPage<Props> = ({ setIsOpen, isOpen, info }) => {
             </GroupInfo>
             <GroupInfo>
               <h3>Assinatura do destinatário</h3>
-              <Signature border={info.signature}>
+              <Signature border={info.signature.url}> {/**sem url */}
                 {info.signature ? (
                   <img
                     src={info.signature.url}
@@ -86,9 +105,3 @@ export const ModalView: NextPage<Props> = ({ setIsOpen, isOpen, info }) => {
     </Modal>
   );
 }
-
-ModalView.propTypes = {
-  setIsOpen: func
-  isOpen: bool
-  info: object
-};

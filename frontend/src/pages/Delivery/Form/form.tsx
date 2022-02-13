@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import Input from '~/components/Form/Input';
@@ -22,7 +21,7 @@ const schema = Yup.object().shape({
 
 const DeliveryForm: NextPage = ({ match }) => {
   const { id } = match.params;
-  const formRef = useRef(null);
+  const formRef = useRef<any>(null);
 
   const [recipients, setRecipients] = useState([]);
   const [deliverymen, setDeliverymen] = useState([]);
@@ -47,14 +46,14 @@ const DeliveryForm: NextPage = ({ match }) => {
       });
     }
 
-    async function loadDeliverymen() {
+    async function loadDeliverymen(): Promise<void> {
       const response = await api.get('/deliverymen-select');
-      setDeliverymen(response.data);
+      setDeliverymen((prevState) => prevState = response.data);
     }
 
-    async function loadRecipients() {
+    async function loadRecipients(): Promise<void> {
       const response = await api.get('/recipients-select');
-      setRecipients(response.data);
+      setRecipients((prevState) => prevState = response.data);
     }
 
     if (id) loadDelivery();
@@ -62,7 +61,7 @@ const DeliveryForm: NextPage = ({ match }) => {
     loadDeliverymen();
   }, [id]);
 
-  async function handleSubmit(data) {
+  async function handleSubmit(data: any): Promise<void> {
     try {
       formRef.current.setErrors({});
 

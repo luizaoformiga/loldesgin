@@ -14,9 +14,9 @@ import { NextPage } from 'next';
 const SignIn: NextPage = () => {
   const formRef = useRef(null);
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.auth.loading);
-  // data: {email, password}
-  async function handleSubmit(data) {
+  const loading = useSelector((state: any) => state.auth.loading);
+  
+  async function handleSubmit(data: any) {
     try {
       const schema = Yup.object().shape({
         email: Yup.string()
@@ -29,9 +29,10 @@ const SignIn: NextPage = () => {
       });
       dispatch(signInRequest(data));
     } catch (err) {
-      const validationErrors = {};
+      let validationErrors: any = {};
+
       if (err instanceof Yup.ValidationError) {
-        err.inner.forEach(error => {
+        err.inner.forEach((error: any) => {
           validationErrors[error.path] = error.message;
         });
         formRef.current.setErrors(validationErrors);

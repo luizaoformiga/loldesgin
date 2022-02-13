@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, MutableRefObject } from 'react';
 import { Form } from '@unform/web';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -8,7 +8,7 @@ import Header from '~/components/Form/Header';
 import InputMask from '~/components/Form/InputMask';
 import { ContainerForm } from '~/components/Form/Container/styles';
 
-import api from '~/services/api';
+import api from '../../../services/api';
 import history from '~/services/history';
 import { Container, Group1, Group2 } from './styles';
 import { NextPage } from 'next';
@@ -24,14 +24,15 @@ const schema = Yup.object().shape({
 
 const RecipientForm: NextPage = ({ match }) => {
   const { id } = match.params;
-  const formRef = useRef(null);
+  const formRef = useRef<any>(null);
   const [cep, setCep] = useState('');
 
   useEffect(() => {
     if (cep && cep[8] !== '_') {
       const url = `https://viacep.com.br/ws/${cep.replace('-', '')}/json/`;
+
       fetch(url)
-        .then(response => response.json())
+        .then((response: Response) => response.json())
         .then(data => {
           if (data.erro) {
             toast.error('Falha ao localizar CEP');
@@ -48,15 +49,19 @@ const RecipientForm: NextPage = ({ match }) => {
   }, [cep]);
 
   useEffect(() => {
-    async function loadRecipient() {
+    async function loadRecipient(): Promise<void> {
       const response = await api.get(`/recipient/${id}`);
       formRef.current.setData({ ...response.data });
-      setCep(response.data.cep);
+      
+      setCep((prevState) => prevState = response.data.cep);
     }
-    if (id) loadRecipient();
+
+    if (id) {
+      loadRecipient();
+    }
   }, [id]);
 
-  async function handleSubmit(data) {
+  async function handleSubmit(data: any): Promise<void> {
     try {
       formRef.current.setErrors({});
 
@@ -73,9 +78,10 @@ const RecipientForm: NextPage = ({ match }) => {
       }
       history.push('/recipients');
     } catch (err) {
-      const validationErrors = {};
+      let validationErrors: any = {};
+
       if (err instanceof Yup.ValidationError) {
-        err.inner.forEach(error => {
+        err.inner.forEach((error: any) => {
           validationErrors[error.path] = error.message;
         });
         formRef.current.setErrors(validationErrors);

@@ -1,28 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { NextPage } from "next";
 
-import Title from '~/components/Title';
-import Paginate from '~/components/Paginate';
-import ActionsDrop from '~/components/Form/ActionsDrop';
-import BuscarCadastro from '~/components/BuscarCadastro';
-import BoxEmpty from '~/components/BoxEmpty';
-import { Item, List } from '~/components/ListItens/styles';
+import Title from "~/components/Title";
+import Paginate from "~/components/Paginate";
+import ActionsDrop from "~/components/Form/ActionsDrop";
+import BuscarCadastro from "~/components/BuscarCadastro";
+import BoxEmpty from "~/components/BoxEmpty";
+import { Item, List } from "~/components/ListItens/styles";
 
-import { Container, Status, Deliveryman } from './styles';
-import api from '~/services/api';
-import { NextPage } from 'next';
+import { Container, Status, Deliveryman } from "./styles";
+import api from "../../../services/api";
+
+interface Props {
+  id: string;
+  status: string;
+  recipient: {
+    name: string;
+    state: string;
+    city: string;
+  };
+  deliveryman: {
+    name: string;
+    avatar: {
+      url: string;
+      name: string;
+    };
+  };
+}
 
 const DeliveryList: NextPage = () => {
   const [deliveries, setDeliveries] = useState([]);
-  const [searchProduct, setSearchProduct] = useState('');
+  const [searchProduct, setSearchProduct] = useState("");
   const [page, setPage] = useState(1);
   const [reloadList, setReloadList] = useState(false);
 
   useEffect(() => {
-    async function loadDeliveries() {
+    async function loadDeliveries(): Promise<void> {
       const response = await api.get(
         `/deliveries?product=${searchProduct}&page=${page}`
       );
-      setDeliveries(response.data);
+      setDeliveries((prevState) => (prevState = response.data));
     }
 
     loadDeliveries();
@@ -34,7 +51,9 @@ const DeliveryList: NextPage = () => {
 
       <BuscarCadastro
         placeholder="Buscar por encomendas"
-        onChange={e => setSearchProduct(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setSearchProduct(e.target.value)
+        }
         linkBtn="/delivery/new"
       />
       {deliveries.length > 0 ? (
@@ -46,9 +65,9 @@ const DeliveryList: NextPage = () => {
             <strong>Cidade</strong>
             <strong>Estado</strong>
             <strong>Status</strong>
-            <strong style={{ textAlign: 'right' }}>Ações</strong>
+            <strong style={{ textAlign: "right" }}>Ações</strong>
           </Item>
-          {deliveries.map(delivery => (
+          {deliveries.map((delivery: Props) => (
             <Item key={delivery.id}>
               <span>#{delivery.id}</span>
               <span>{delivery.recipient.name}</span>
@@ -71,11 +90,11 @@ const DeliveryList: NextPage = () => {
               <ActionsDrop
                 setReloadList={setReloadList}
                 actions={{
-                  del: { url: `/delivery/${delivery.id}`, type: 'Encomenda' },
+                  del: { url: `/delivery/${delivery.id}`, type: "Encomenda" },
                   edit: `/delivery/${delivery.id}/edit`,
                   view: {
                     url: `/delivery/${delivery.id}/view`,
-                    type: 'delivery',
+                    type: "delivery",
                   },
                 }}
               />
@@ -88,7 +107,6 @@ const DeliveryList: NextPage = () => {
       <Paginate page={page} setPage={setPage} sizeItens={deliveries.length} />
     </Container>
   );
-}
+};
 
-
-export default List;
+export default DeliveryList;

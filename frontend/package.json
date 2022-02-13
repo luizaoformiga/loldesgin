@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@unform/core": "^2.1.6",
+    "@unform/web": "^2.1.6",
     "axios": "^0.25.0",
     "git-cz": "^4.8.0",
     "history": "^5.2.0",

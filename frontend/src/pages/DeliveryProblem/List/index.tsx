@@ -5,18 +5,27 @@ import BoxEmpty from '~/components/BoxEmpty';
 import { Item, List } from '~/components/ListItens/styles';
 import ActionsDrop from '~/components/Form/ActionsDrop';
 
-import api from '~/services/api';
+import api from '../../../services/api';
 import { Container, ProblemDescription, Canceled } from './styles';
 import { NextPage } from 'next';
+
+interface Props {
+  id: string;
+  delivery: {
+    id: string;
+    canceled_at: Date;
+  };
+  description: string;
+}
 
 const DeliveryProblemList: NextPage = () => {
   const [deliveryProblems, setDeliveryProblems] = useState([]);
   const [reloadList, setReloadList] = useState(false);
 
   useEffect(() => {
-    async function loadDeliveryProblems() {
+    async function loadDeliveryProblems(): Promise<void> {
       const response = await api.get('/delivery-problems');
-      setDeliveryProblems(response.data);
+      setDeliveryProblems((prevState) => prevState = response.data);
     }
 
     loadDeliveryProblems();
@@ -33,7 +42,7 @@ const DeliveryProblemList: NextPage = () => {
             <strong>Problema</strong>
             <strong style={{ textAlign: 'right' }}>Ações</strong>
           </Item>
-          {deliveryProblems.map(delProblem => (
+          {deliveryProblems.map((delProblem: Props) => (
             <Item key={delProblem.id}>
               <span>
                 #{delProblem.delivery.id}

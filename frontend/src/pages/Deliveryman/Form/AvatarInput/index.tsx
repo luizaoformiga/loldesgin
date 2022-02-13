@@ -1,19 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useField } from '@unform/core';
 import { MdInsertPhoto } from 'react-icons/md';
-import { PropTypes } from 'prop-types';
 
-import api from '~/services/api';
+import api from '../../../../services/api';
 import { Container, InputPhoto } from './styles';
 import { NextPage } from 'next';
 
-const AvatarInput: NextPage = ({ name, defaultValue }) => {
+interface Props {
+  name: string;
+  defaultValue: {
+    id: string;
+    url: string;
+  }
+}
+
+const AvatarInput: NextPage<Props> = ({ name, defaultValue }) => {
   const { fieldName, registerField, error = '' } = useField(name);
 
   const [file, setFile] = useState(defaultValue && defaultValue.id);
   const [preview, setPreview] = useState(defaultValue && defaultValue.url);
 
-  const ref = useRef();
+  const ref = useRef<any>();
 
   useEffect(() => {
     if (ref.current) {
@@ -25,7 +32,7 @@ const AvatarInput: NextPage = ({ name, defaultValue }) => {
     }
   }, [defaultValue, fieldName, registerField]);
 
-  async function handleChange(e) {
+  async function handleChange(e: React.ChangeEvent<any>): Promise<void> {
     const data = new FormData();
     data.append('file', e.target.files[0]);
 
@@ -33,8 +40,8 @@ const AvatarInput: NextPage = ({ name, defaultValue }) => {
 
     const { id, url } = response.data;
 
-    setFile(id);
-    setPreview(url);
+    setFile((prevState) => prevState = id);
+    setPreview((prevState) => prevState = url);
   }
 
   return (

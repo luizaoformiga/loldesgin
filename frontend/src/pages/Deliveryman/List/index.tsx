@@ -1,27 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { NextPage } from "next";
 
-import Title from '~/components/Title';
-import BuscarCadastro from '~/components/BuscarCadastro';
-import BoxEmpty from '~/components/BoxEmpty';
-import { Item, List } from '~/components/ListItens/styles';
-import ActionsDrop from '~/components/Form/ActionsDrop';
-import Paginate from '~/components/Paginate';
+import Title from "~/components/Title";
+import BuscarCadastro from "~/components/BuscarCadastro";
+import BoxEmpty from "~/components/BoxEmpty";
+import { Item, List } from "~/components/ListItens/styles";
+import ActionsDrop from "~/components/Form/ActionsDrop";
+import Paginate from "~/components/Paginate";
 
-import { Container, Avatar } from './styles';
-import api from '~/services/api';
+import { Container, Avatar } from "./styles";
+import api from "../../../services/api";
 
-export default function DeliverymanList() {
+interface Props {
+  id: string;
+  name: string;
+  avatar: {
+    url: string;
+  };
+  email: string;
+}
+
+export const DeliverymanList: NextPage = () => {
   const [deliverymen, setDeliverymen] = useState([]);
-  const [searchDeliveryman, setSearchDeliveryman] = useState('');
+  const [searchDeliveryman, setSearchDeliveryman] = useState("");
   const [page, setPage] = useState(1);
   const [reloadList, setReloadList] = useState(false);
 
   useEffect(() => {
-    async function loadDeliveries() {
+    async function loadDeliveries(): Promise<void> {
       const response = await api.get(
         `/deliverymen?name=${searchDeliveryman}&page=${page}`
       );
-      setDeliverymen(response.data);
+      setDeliverymen((prevState) => prevState = response.data);
     }
 
     loadDeliveries();
@@ -32,7 +42,9 @@ export default function DeliverymanList() {
       <Title content="Gerenciando Entregadores" />
       <BuscarCadastro
         placeholder="Buscar por entregador"
-        onChange={e => setSearchDeliveryman(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setSearchDeliveryman(e.target.value)
+        }
         linkBtn="/deliveryman/new"
       />
       {deliverymen.length > 0 ? (
@@ -42,9 +54,9 @@ export default function DeliverymanList() {
             <strong>Foto</strong>
             <strong>Nome</strong>
             <strong>Email</strong>
-            <strong style={{ textAlign: 'right' }}>Ações</strong>
+            <strong style={{ textAlign: "right" }}>Ações</strong>
           </Item>
-          {deliverymen.map(deliveryman => (
+          {deliverymen.map((deliveryman: Props) => (
             <Item key={deliveryman.id}>
               <span>#{deliveryman.id}</span>
               <Avatar
@@ -61,7 +73,7 @@ export default function DeliverymanList() {
                 actions={{
                   del: {
                     url: `/deliveryman/${deliveryman.id}`,
-                    type: 'Entregador',
+                    type: "Entregador",
                   },
                   edit: `/deliveryman/${deliveryman.id}/edit`,
                 }}
@@ -75,4 +87,4 @@ export default function DeliverymanList() {
       <Paginate page={page} setPage={setPage} sizeItens={deliverymen.length} />
     </Container>
   );
-}
+};

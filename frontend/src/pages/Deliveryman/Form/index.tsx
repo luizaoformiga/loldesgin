@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { Form } from "@unform/web";
 import { NextPage } from "next";
 import { toast } from "react-toastify";
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import AvatarInput from "./AvatarInput";
 import Input from "~/components/Form/Input";
@@ -27,7 +27,7 @@ const DeliverymanForm: NextPage = ({ match }) => {
   const [avatar, setAvatar] = useState({ id: "", url: "" });
 
   useEffect(() => {
-    async function loadDeliveryman() {
+    async function loadDeliveryman(): Promise<void> {
       const response = await api.get(`/deliveryman/${id}`);
       const { name, email, avatar: aux } = response.data;
       formRef.current.setData({
@@ -44,7 +44,7 @@ const DeliverymanForm: NextPage = ({ match }) => {
     }
   }, [id]);
 
-  async function handleSubmit(data) {
+  async function handleSubmit(data: any): Promise<void> {
     try {
       formRef.current.setErrors({});
 

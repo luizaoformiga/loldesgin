@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   loading: false,
 };
 
-export default function auth(state = INITIAL_STATE, action) {
+export default function auth(state = INITIAL_STATE, action: any) {
   return produce(state, draft => {
     switch (action.type) {
       case '@auth/SIGN_IN_SUCCESS': {
